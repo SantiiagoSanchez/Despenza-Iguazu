@@ -27,9 +27,11 @@ namespace DespensaIguazu.BD.Data.Entity
 
         public Producto Producto { get; set; }
 
+        [Required(ErrorMessage = "La cantidad es de caracter obligatorio")]
 
         public int Cantidad { get; set; }
 
+        [Required(ErrorMessage = "El precio es de caracter obligatorio")]
         public int Precio { get; set; }
     }
 }
