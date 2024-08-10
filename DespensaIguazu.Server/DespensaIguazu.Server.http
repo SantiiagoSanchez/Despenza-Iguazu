@@ -1,0 +1,6 @@
+@DespensaIguazu.Server_HostAddress = http://localhost:5270
+
+GET {{DespensaIguazu.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
