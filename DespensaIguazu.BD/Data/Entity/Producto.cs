@@ -25,13 +25,24 @@ namespace DespensaIguazu.BD.Data.Entity
         //---------------------------------------------------------------------------------------
 
         [Required(ErrorMessage = "La marca del producto es obligatorio")]
-        [MaxLength(100, ErrorMessage = "Maximo de numeros de caracteres alcanzado {1}.")]
-        public string Marca { get; set; }
+        
+        public int MarcaId { get; set; }
+
+        public Marca Marca { get; set; }
 
         //---------------------------------------------------------------------------------------
 
+        [Required(ErrorMessage = "La marca del producto es obligatorio")]
+
+        public int UnidadId { get; set; }
+
+        public Unidad Unidad { get; set; }
+
+        //---------------------------------------------------------------------------------------
+
+
         [Required(ErrorMessage = "El precio del producto es obligatorio")]
-        public int Precio { get; set; }
+        public decimal Precio { get; set; }
 
         //---------------------------------------------------------------------------------------
 
