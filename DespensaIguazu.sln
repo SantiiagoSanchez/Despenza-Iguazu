@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DespensaIguazu.Server", "DespensaIguazu.Server\DespensaIguazu.Server.csproj", "{2B477362-5A87-4047-911C-AA676E8FA3C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DespensaIguazu.Server", "DespensaIguazu.Server\DespensaIguazu.Server.csproj", "{2B477362-5A87-4047-911C-AA676E8FA3C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DespensaIguazu.BD", "DespensaIguazu.BD\DespensaIguazu.BD.csproj", "{ADC7FFDC-C022-470D-A3D5-7683A73ADE33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DespensaIguazu.BD", "DespensaIguazu.BD\DespensaIguazu.BD.csproj", "{ADC7FFDC-C022-470D-A3D5-7683A73ADE33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DespensaIguazu.Shared", "DespensaIguazu.Shared\DespensaIguazu.Shared.csproj", "{F8FE73E6-7EC4-4AE1-91E1-8EF189EF1BA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{ADC7FFDC-C022-470D-A3D5-7683A73ADE33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADC7FFDC-C022-470D-A3D5-7683A73ADE33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADC7FFDC-C022-470D-A3D5-7683A73ADE33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8FE73E6-7EC4-4AE1-91E1-8EF189EF1BA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8FE73E6-7EC4-4AE1-91E1-8EF189EF1BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8FE73E6-7EC4-4AE1-91E1-8EF189EF1BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8FE73E6-7EC4-4AE1-91E1-8EF189EF1BA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
