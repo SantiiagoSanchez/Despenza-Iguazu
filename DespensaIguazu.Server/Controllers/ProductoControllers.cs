@@ -45,9 +45,10 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPut("{id:int}")]//Editar
-        public async Task<ActionResult> Put(int id, [FromBody] Producto entidad)
+        public async Task<ActionResult> Put(int id, EditarPrecioDTO editarPrecioDTO)
         {
-            if (id != entidad.Id)
+
+            if (id != editarPrecioDTO.Id)
             {
                 return BadRequest("Los IDs no coinciden");
             }
@@ -59,7 +60,7 @@ namespace DespensaIguazu.Server.Controllers
                 return BadRequest("No existe la unidad buscada");
             }
 
-            ActualizarDatos.Nombre = entidad.Nombre;
+            ActualizarDatos.Precio = editarPrecioDTO.Precio;
 
             try
             {
