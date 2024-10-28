@@ -26,7 +26,7 @@ namespace DespensaIguazu.Server.Controllers
         [HttpGet]//Select
         public async Task<ActionResult<List<Producto>>> Get() 
         {
-            return await repositorio.Select();
+            return await repositorio.SelectAll();
         }
         [HttpPost]//Add
         public async Task<ActionResult<int>> Post(CrearProductoDTO entidadDTO)

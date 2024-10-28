@@ -26,16 +26,14 @@ namespace DespensaIguazu.Shared.DTO
 
         public int MarcaId { get; set; }
 
-        public Marca Marca { get; set; }
-
+        public Marca? Marca;
         //---------------------------------------------------------------------------------------
 
         [Required(ErrorMessage = "La marca del producto es obligatorio")]
 
         public int UnidadId { get; set; }
 
-        public Unidad Unidad { get; set; }
-
+        public Unidad? Unidad;
         //---------------------------------------------------------------------------------------
 
 
@@ -52,6 +50,6 @@ namespace DespensaIguazu.Shared.DTO
         [Required(ErrorMessage = "La categoria es obligatoria")]
         public int CategoriaId { get; set; }
 
-        public Categoria Categoria { get; set; }
+        public Categoria? Categoria;
     }
 }
