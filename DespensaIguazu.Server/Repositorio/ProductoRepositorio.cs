@@ -34,12 +34,12 @@ namespace DespensaIguazu.Server.Repositorio
                 return false;
             }
 
-            ActualizaDato.Id = entidad.Id;
             ActualizaDato.Precio = entidad.Precio;
 
             try
             {
-                context.Set<Producto>().Update(ActualizaDato);
+                //context.Set<Producto>().Update(ActualizaDato);
+                context.Entry(ActualizaDato).Property(p => p.Precio).IsModified = true;
                 await context.SaveChangesAsync();
                 return true;
             }

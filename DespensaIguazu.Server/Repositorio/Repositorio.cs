@@ -47,7 +47,7 @@ namespace DespensaIguazu.Server.Repositorio
 
         public async Task<E> SelectById(int id)
         {
-            E? pepe = await context.Set<E>().AsNoTracking().FirstOrDefaultAsync();
+            E? pepe = await context.Set<E>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             return pepe;
         }
 
