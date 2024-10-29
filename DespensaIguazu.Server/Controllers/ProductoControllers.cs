@@ -45,32 +45,29 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPut("{id:int}")]//Editar
-        public async Task<ActionResult> Put(int id, EditarPrecioDTO editarPrecioDTO)
+        public async Task<ActionResult> Put(int id, EditarPrecioDTO entidad)
         {
-
-            if (id != editarPrecioDTO.Id)
-            {
-                return BadRequest("Los IDs no coinciden");
-            }
-
-            var ActualizarDatos = await repositorio.SelectById(id);
-
-            if (ActualizarDatos == null)
-            {
-                return BadRequest("No existe la unidad buscada");
-            }
-
-            ActualizarDatos.Precio = editarPrecioDTO.Precio;
 
             try
             {
-                await repositorio.Update(id, ActualizarDatos);
+                if (id != entidad.Id)
+                {
+                    return BadRequest("Datos Incorrectos");
+                }
+                var pepe = await repositorio.UpdateDTO(id, entidad);
+
+                if (!pepe)
+                {
+                    return BadRequest("No se pudo actualizar el precio del producto");
+                }
                 return Ok();
+
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
+
         }
 
         [HttpDelete("{id:int}")]//Borrar

@@ -1,7 +1,7 @@
 ﻿@page "/api/Producto"
 @inject IHttpServicio http
 <h3 style="text-align:center">Lista de productos</h3>
-<table class="table table-bordered">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Código</th>
@@ -30,6 +30,10 @@
                 <td>@item.Precio</td>
                 <td>@item.Stock</td>
                 <td>@item.Categoria?.Nombre</td>
+                <td>
+                    <a class="btn btn-success" href="api/Producto/Editar/@item.Id">Edit
+                    </a>
+                </td>
             </tr>
         }
     </tbody>

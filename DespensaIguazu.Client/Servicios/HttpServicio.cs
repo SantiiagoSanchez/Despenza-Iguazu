@@ -1,4 +1,5 @@
 ﻿
+using System.Text;
 using System.Text.Json;
 
 namespace DespensaIguazu.Client.Servicios
@@ -24,6 +25,24 @@ namespace DespensaIguazu.Client.Servicios
             else
             {
                 return new HttpRespuesta<T>(default, true, response);
+            }
+        }
+        public async Task<HttpRespuesta<object>> Put<T>(string url, T entidad)
+        {
+            var EnviarJson = JsonSerializer.Serialize(entidad);
+
+            var EnviarContenido = new StringContent(EnviarJson, Encoding.UTF8, "application/json");
+
+            var Response = await http.PutAsync(url, EnviarContenido);
+
+            if (Response.IsSuccessStatusCode) 
+            {
+                //var Respuesta = await DesSerializar<object>(Response);
+                return new HttpRespuesta<object>(null, false, Response);
+            }
+            else 
+            {
+                return new HttpRespuesta<object>(default, true, Response);
             }
         }
 

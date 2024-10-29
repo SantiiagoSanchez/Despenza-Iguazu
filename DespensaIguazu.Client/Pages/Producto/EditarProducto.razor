@@ -1,0 +1,75 @@
+﻿@page "/api/Producto/Editar/{ProductoID:int}"
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+
+
+<EditForm Model="editarPrecioDTO" OnValidSubmit="Grabar">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <label>Id</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@editarPrecioDTO.Id" />
+            <ValidationMessage For="@(() => editarPrecioDTO.Id)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Precio</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@editarPrecioDTO.Precio" />
+            <ValidationMessage For="@(() => editarPrecioDTO.Precio)" />
+        </div>
+    </div>
+    <br>
+    <button class="btn btn-success" type="submit">Aceptar</button>
+    <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+
+</EditForm>
+
+
+@code {
+    [Parameter] public int ProductoID { get; set; }
+
+    private Producto producto = new Producto();
+
+    private EditarPrecioDTO editarPrecioDTO = new EditarPrecioDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //await Mostrar();
+    }
+
+    private async Task Mostrar()
+    {
+        var respuesta = await http.Get<Producto>($"api/Producto/{ProductoID}");
+
+
+        if (!respuesta.Error)
+        {
+            producto = respuesta.Respuesta;
+        }
+        else
+        {
+            navigationManager.NavigateTo("/api/Producto");
+        }
+    }
+
+
+    private async Task Grabar()
+    {
+        var httpRespuesta = await http.Put<EditarPrecioDTO>($"api/Producto/{ProductoID}", editarPrecioDTO);
+
+        if (httpRespuesta.Error)
+        {
+            var body = httpRespuesta.HttpResponseMessage;
+        }
+
+        navigationManager.NavigateTo("/api/Producto");
+
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/api/Producto");
+    }
+}
