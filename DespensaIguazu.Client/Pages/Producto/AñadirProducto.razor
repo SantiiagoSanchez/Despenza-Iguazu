@@ -1,0 +1,82 @@
+﻿@page "/api/Producto/Crear"
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+<h2 style="text-align:center">Nuevo tipo de documento</h2>
+<EditForm Model="ProductoDTO" OnValidSubmit="Grabar">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Código</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@ProductoDTO.Codigo" />
+            <ValidationMessage For="@(() => ProductoDTO.Codigo)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Nombre</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@ProductoDTO.Nombre" />
+            <ValidationMessage For="@(() => ProductoDTO.Nombre)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Marca ID</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@ProductoDTO.MarcaId" />
+            <ValidationMessage For="@(() => ProductoDTO.MarcaId)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Unidad ID</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@ProductoDTO.UnidadId" />
+            <ValidationMessage For="@(() => ProductoDTO.UnidadId)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Precio</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@ProductoDTO.Precio" />
+            <ValidationMessage For="@(() => ProductoDTO.Precio)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Stock</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@ProductoDTO.Stock" />
+            <ValidationMessage For="@(() => ProductoDTO.Stock)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Categoria ID</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@ProductoDTO.CategoriaId" />
+            <ValidationMessage For="@(() => ProductoDTO.CategoriaId)" />
+        </div>
+    </div>
+
+    <br />
+    <button class="btn btn-success" type="submit">Aceptar</button>
+    <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+</EditForm>
+
+
+@code {
+    private Producto ProductoDTO = new Producto();
+
+    private async Task Grabar()
+    {
+        var HttpRespuesta = await http.Post<Producto>("api/Producto", ProductoDTO);
+        if (HttpRespuesta.Error)
+        {
+            var Body = HttpRespuesta.HttpResponseMessage;
+        }
+        navigationManager.NavigateTo("/api/Producto");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/api/Producto");
+    }
+
+}
