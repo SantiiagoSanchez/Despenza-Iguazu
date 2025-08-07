@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOutputCache(options => {
+        options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
+});
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -38,6 +41,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseOutputCache();
 
 app.MapRazorPages();
 
