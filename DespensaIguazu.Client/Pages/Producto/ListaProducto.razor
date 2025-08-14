@@ -1,5 +1,8 @@
 ﻿@page "/api/Producto"
 @inject IHttpServicio http
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+
 <h2 style="text-align:center">Lista de productos</h2>
 <br>
 <table class="table table-hover">
