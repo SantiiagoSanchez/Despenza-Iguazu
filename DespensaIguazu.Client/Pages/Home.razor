@@ -5,7 +5,11 @@
 <AuthorizeView>  
     <Authorized>  
         <p>Usuario autorizado</p><br />  
-        <p>Bienvenido @context.User.Identity?.Name ALIAS: @context.User.Claims.FirstOrDefault(c => c.Type == "Alias")?.Value</p>  
+        <p>Bienvenido @context.User.Identity?.Name ALIAS: @context.User.Claims.FirstOrDefault(c => c.Type == "Alias")?.Value</p>
+        @foreach (var item in context.User.Claims)
+        {
+            <td>@item.Value</td>
+        }
     </Authorized>  
     <NotAuthorized>  
         <p>Usuario no autorizado</p>  

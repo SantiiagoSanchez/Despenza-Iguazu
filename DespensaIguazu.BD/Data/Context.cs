@@ -1,4 +1,5 @@
 ﻿using DespensaIguazu.BD.Data.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DespensaIguazu.BD.Data
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext
 
     {
         public DbSet<Unidad> Unidades { get; set; }
