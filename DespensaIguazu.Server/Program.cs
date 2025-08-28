@@ -1,4 +1,5 @@
 using DespensaIguazu.BD.Data;
+using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Server.Repositorio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IMarcaRepositorio, MarcaRepositorio>();
 builder.Services.AddScoped<IUnidadRepositorio, UnidadRepositorio>();
 builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<DespensaUsuario, IdentityRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders();
 

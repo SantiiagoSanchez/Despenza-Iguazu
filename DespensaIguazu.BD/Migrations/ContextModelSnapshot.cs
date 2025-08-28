@@ -42,7 +42,7 @@ namespace DespensaIguazu.BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
                 });
 
             modelBuilder.Entity("DespensaIguazu.BD.Data.Entity.DetalleVenta", b =>
@@ -72,7 +72,7 @@ namespace DespensaIguazu.BD.Migrations
                     b.HasIndex(new[] { "VentaId", "ProductoId" }, "DetalleVenta_UQ")
                         .IsUnique();
 
-                    b.ToTable("DetalleVentas");
+                    b.ToTable("DetalleVentas", (string)null);
                 });
 
             modelBuilder.Entity("DespensaIguazu.BD.Data.Entity.Marca", b =>
@@ -90,7 +90,7 @@ namespace DespensaIguazu.BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Marcas");
+                    b.ToTable("Marcas", (string)null);
                 });
 
             modelBuilder.Entity("DespensaIguazu.BD.Data.Entity.Producto", b =>
@@ -137,7 +137,7 @@ namespace DespensaIguazu.BD.Migrations
                     b.HasIndex(new[] { "Codigo", "CategoriaId" }, "Producto_UQ")
                         .IsUnique();
 
-                    b.ToTable("Productos");
+                    b.ToTable("Productos", (string)null);
                 });
 
             modelBuilder.Entity("DespensaIguazu.BD.Data.Entity.Unidad", b =>
@@ -155,7 +155,7 @@ namespace DespensaIguazu.BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Unidades");
+                    b.ToTable("Unidades", (string)null);
                 });
 
             modelBuilder.Entity("DespensaIguazu.BD.Data.Entity.Venta", b =>
@@ -178,7 +178,7 @@ namespace DespensaIguazu.BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ventas");
+                    b.ToTable("Ventas", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
