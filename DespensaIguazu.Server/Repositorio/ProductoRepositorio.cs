@@ -17,7 +17,19 @@ namespace DespensaIguazu.Server.Repositorio
 
         public async Task<List<Producto>> SelectAll()
         {
-            return await context.Productos.Include(x => x.Unidad).Include(p => p.Marca).Include(x => x.Categoria).ToListAsync();
+            try
+            {
+                return await context.Productos
+                    .Include(x => x.Unidad)
+                    .Include(p => p.Marca)
+                    .Include(x => x.Categoria)
+                    .ToListAsync();
+            }
+            catch (Exception e)
+            {
+                // Opcional: loguear el error aquí
+                throw new Exception("Error al obtener productos: " + e.Message, e);
+            }
         }
 
         public async Task<bool> UpdateDTO(int id, EditarPrecioDTO entidad) 
@@ -45,7 +57,7 @@ namespace DespensaIguazu.Server.Repositorio
             }
             catch (Exception e)
             {
-                throw e;
+                throw ;
             }
         }
     }

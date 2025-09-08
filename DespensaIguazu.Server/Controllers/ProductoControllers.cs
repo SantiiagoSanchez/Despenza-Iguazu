@@ -23,10 +23,18 @@ namespace DespensaIguazu.Server.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]//Select
-        public async Task<ActionResult<List<Producto>>> Get() 
+        [HttpGet] // Select
+        public async Task<ActionResult<List<Producto>>> Get()
         {
-            return await repositorio.SelectAll();
+            try
+            {
+                var productos = await repositorio.SelectAll();
+                return Ok(productos);
+            }
+            catch (Exception ex)
+            {
+                return Problem("❌ Error al obtener productos: " + ex.Message);
+            }
         }
         [HttpPost]//Add
         public async Task<ActionResult<int>> Post(CrearProductoDTO entidadDTO)
