@@ -1,4 +1,5 @@
 ﻿using DespensaIguazu.Client.Servicios;
+using DespensaIguazu.Shared.DTO;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,9 +8,10 @@ using System.Security.Claims;
 
 namespace DespensaIguazu.Client.Autorizacion
 {
-    public class ProveedorAutenticacionJWT : AuthenticationStateProvider //ILoginService
+    public class ProveedorAutenticacionJWT : AuthenticationStateProvider, ILoginService
     {
         public static readonly string TOKENKEY = "TOKENKEY";
+        public static readonly string EXPIRATIONTOKENKEY = "EXPIRATIONTOKENKEY";
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
 
@@ -21,7 +23,6 @@ namespace DespensaIguazu.Client.Autorizacion
             this.httpClient = httpClient;
         }
 
-        //Este va a ser el login digamos
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await js.ObtenerDeLocalStorage(TOKENKEY);
@@ -45,6 +46,22 @@ namespace DespensaIguazu.Client.Autorizacion
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var tokenDeserializado = jwtSecurityTokenHandler.ReadJwtToken(token);
             return tokenDeserializado.Claims;
+        }
+
+        public async Task Login(UserTokenDTO TokenDTO)
+        {
+            await js.GuardarEnLocalStorage(TOKENKEY, TokenDTO.Token);
+            await js.GuardarEnLocalStorage(EXPIRATIONTOKENKEY, TokenDTO.Expiration.ToString());
+            var authState = ConstruirAuthenticationState(TokenDTO.Token);
+            NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        }
+
+        public async Task Logout()
+        {
+            await js.RemoverDeLocalStorage(TOKENKEY);
+            await js.RemoverDeLocalStorage(EXPIRATIONTOKENKEY);
+            httpClient.DefaultRequestHeaders.Authorization = null;
+            NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));    
         }
     }
 }

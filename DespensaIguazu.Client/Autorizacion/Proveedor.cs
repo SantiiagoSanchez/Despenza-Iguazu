@@ -9,7 +9,7 @@ namespace DespensaIguazu.Client.Autorizacion
     {
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            await Task.Delay(4000);
+            //await Task.Delay(4000);
 
             var NoAutorizado = new ClaimsIdentity();
             var UserAdmin = new ClaimsIdentity(

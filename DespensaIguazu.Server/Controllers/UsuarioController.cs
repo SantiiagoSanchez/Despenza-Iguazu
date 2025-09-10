@@ -13,12 +13,12 @@ namespace DespensaIguazu.Server.Controllers
     [Route("api/Usuario")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UserManager<DespensaUsuario> userManager;
-        private readonly SignInManager<DespensaUsuario> signInManager;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
         private readonly IConfiguration configuration;
 
-        public UsuarioController(UserManager<DespensaUsuario> userManager,
-                                 SignInManager<DespensaUsuario> signInManager,
+        public UsuarioController(UserManager<IdentityUser> userManager,
+                                 SignInManager<IdentityUser> signInManager,
                                  IConfiguration configuration)
         {
             this.userManager = userManager;
@@ -29,7 +29,7 @@ namespace DespensaIguazu.Server.Controllers
         [HttpPost("registrar")]
         public async Task<ActionResult<UserTokenDTO>> CreateUser([FromBody] UserInfoDTO dto)
         {
-            var usuario = new DespensaUsuario { UserName = dto.Nombre, Email = dto.Email };
+            var usuario = new IdentityUser { UserName = dto.Email, Email = dto.Email };
             
             var resultado = await userManager.CreateAsync(usuario, dto.Password);
 
@@ -46,7 +46,7 @@ namespace DespensaIguazu.Server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserInfoDTO dto)
         {
-            var resultado = await signInManager.PasswordSignInAsync(dto.Nombre, dto.Password, isPersistent: false, lockoutOnFailure: false);
+            var resultado = await signInManager.PasswordSignInAsync(dto.Email, dto.Password, isPersistent: false, lockoutOnFailure: false);
             if (resultado.Succeeded)
             {
                 return await ConstruirToken(dto);
@@ -61,7 +61,6 @@ namespace DespensaIguazu.Server.Controllers
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, userInfo.Nombre),
                 new Claim(ClaimTypes.Email, userInfo.Email),
 
             };

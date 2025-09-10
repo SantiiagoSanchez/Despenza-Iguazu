@@ -28,19 +28,19 @@ namespace DespensaIguazu.Client.Servicios
             }
         }
 
-        public async Task<HttpRespuesta<object>> Post<T>(string url, T entidad) 
+        public async Task<HttpRespuesta<TResp>> Post<T, TResp>(string url, T entidad) 
         {
             var EnviarJSON = JsonSerializer.Serialize(entidad);
             var EnviarCONTENIDO = new StringContent(EnviarJSON, Encoding.UTF8, "application/json");
             var Response = await http.PostAsync(url, EnviarCONTENIDO);
             if (Response.IsSuccessStatusCode)
             {
-                var Respuesta = DesSerializar<object>(Response);
-                return new HttpRespuesta<object>(Respuesta, false, Response);
+                var Respuesta = await DesSerializar<TResp>(Response);
+                return new HttpRespuesta<TResp>(Respuesta, false, Response);
             }
             else 
             {
-                return new HttpRespuesta<object>(default, true, Response);
+                return new HttpRespuesta<TResp>(default, true, Response);
             }
         }
 
