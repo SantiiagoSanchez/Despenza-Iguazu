@@ -2,6 +2,7 @@
 using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Shared.DTO;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DespensaIguazu.Server.Repositorio
@@ -59,6 +60,47 @@ namespace DespensaIguazu.Server.Repositorio
             {
                 throw ;
             }
+        }
+
+        public async Task<bool> UpdateEntidad(int id, Producto entidad)
+        {
+            if (id != entidad.Id)
+            {
+                return false;
+            }
+
+            var EntidadExiste = await SelectById(id);
+
+            if (EntidadExiste == null)
+            {
+                return false;
+            }
+
+
+            try
+            {
+                context.Entry(EntidadExiste).CurrentValues.SetValues(entidad);
+                //El metodo de arriba toma los valores de la entidad seleccionada por id (EntidadExistente)
+                //y los actualiza con los de la entidad pasada como argumento (entidad).
+
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //ImprimirError(ex);
+                //Descomentar al Publicar el proyecto en IIS
+                //Logger.LogError(ex);
+                throw;
+            }
+
+        }
+
+        public async Task<ActionResult<Producto>> GetIncludeId(int id)
+        {
+            Producto? prod = await context.Productos.Include(c => c.Marca).Include(a => a.Unidad).Include(t => t.Categoria).FirstOrDefaultAsync(x => x.Id == id);
+
+            return prod;
         }
     }
 }

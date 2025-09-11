@@ -1,0 +1,131 @@
+﻿@page "/api/Unidad/Crear"
+@inject NavigationManager navigationManager
+@inject IHttpServicio http
+
+<div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50" style="z-index: 1050;">
+    <div class="bg-white rounded-3 shadow p-4" style="width: 100%; max-width: 500px; position: relative;">
+
+        <!-- Botón de cerrar (X) -->
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Cerrar" @onclick="Cancelar"></button>
+
+        <!-- Título -->
+        <h5 class="fw-semibold mb-1">Unidades de medida</h5>
+        <p class="text-muted mb-4">Gestiona las unidades disponibles</p>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (listaunidad == null)
+                {
+                    <p>Buscando unidades registradas ...</p>
+                }
+                else if (listaunidad.Count == 0)
+                {
+                    <p>No se encontraron unidades cargadas.</p>
+                }
+                @foreach (var item in listaunidad)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Nombre</td>
+            
+
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => EliminarTipoGasto(item.Id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <EditForm Model="unidad" OnValidSubmit="Grabar">
+            <DataAnnotationsValidator />
+
+            <ValidationSummary />
+
+            <!-- Información Básica -->
+            <h6 class="fw-bold">Información Básica</h6>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre de la unidad</label>
+                <InputText class="form-control" @bind-Value="unidad.Nombre" />
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-end border-top pt-3 gap-2">
+                <button type="button" class="btn btn-light" @onclick="Cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-primary d-flex align-items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                    </svg> Guardar unidad
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Unidad unidad= new Unidad();
+
+    private async Task Grabar()
+    {
+        var HttpRespuesta = await http.Post<Unidad, int>("api/Unidad", unidad);
+        if (HttpRespuesta.Error)
+        {
+            var Body = HttpRespuesta.HttpResponseMessage;
+        }
+        navigationManager.NavigateTo("/api/Producto/Crear");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/api/Producto/Crear");
+    }
+
+    List<Unidad> listaunidad = new List<Unidad>();
+    string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await Leer();
+    }
+
+    private async Task Leer()
+    {
+        var resp = await http.Get<List<Unidad>>("api/Unidad");
+
+        if (!resp.Error)
+        {
+            listaunidad = resp.Respuesta;
+        }
+        else
+        {
+            Mensaje = "Error";
+        }
+
+    }
+    
+  
+    private async Task EliminarTipoGasto(int id)
+    {
+
+        await http.Delete($"api/Unidad/{id}");
+        await Leer(); 
+
+    }
+}

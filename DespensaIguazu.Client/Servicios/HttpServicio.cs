@@ -63,6 +63,14 @@ namespace DespensaIguazu.Client.Servicios
             }
         }
 
+        public async Task<HttpRespuesta<object>> Delete(string url)
+        {
+            var respuesta = await http.DeleteAsync(url);
+            return new HttpRespuesta<object>(null,
+                                             !respuesta.IsSuccessStatusCode,
+                                             respuesta);
+        }
+
         private async Task<T?> DesSerializar<T>(HttpResponseMessage response)
         {
             var RespuestaSTR = await response.Content.ReadAsStringAsync();

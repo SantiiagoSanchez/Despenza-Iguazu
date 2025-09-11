@@ -1,10 +1,11 @@
 ﻿@page "/api/Producto"
 @inject IHttpServicio http
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Admin")]
 
 <h2 style="text-align:center">Lista de productos</h2>
 <br>
+<a class="btn btn-success" href="/api/Producto/Crear">Nuevo producto</a>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -43,6 +44,7 @@
 
                     </a>
                 </td>
+
             </tr>
         }
     </tbody>

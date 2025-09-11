@@ -36,6 +36,17 @@ namespace DespensaIguazu.Server.Controllers
                 return Problem("❌ Error al obtener productos: " + ex.Message);
             }
         }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Producto>> Get(int id)
+        {
+            var producto = await repositorio.GetIncludeId(id);
+            if (producto == null) return NotFound();
+            var dto = mapper.Map<Producto>(producto);
+            return Ok(dto);
+        }
+
         [HttpPost]//Add
         public async Task<ActionResult<int>> Post(CrearProductoDTO entidadDTO)
         {
@@ -53,7 +64,7 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPut("{id:int}")]//Editar
-        public async Task<ActionResult> Put(int id, EditarPrecioDTO entidad)
+        public async Task<ActionResult> Put(int id, Producto entidad)
         {
 
             try
@@ -62,11 +73,11 @@ namespace DespensaIguazu.Server.Controllers
                 {
                     return BadRequest("Datos Incorrectos");
                 }
-                var pepe = await repositorio.UpdateDTO(id, entidad);
+                var pepe = await repositorio.UpdateEntidad(id, entidad);
 
                 if (!pepe)
                 {
-                    return BadRequest("No se pudo actualizar el precio del producto");
+                    return BadRequest("No se pudo actualizar el producto");
                 }
                 return Ok();
 

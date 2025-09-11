@@ -20,17 +20,29 @@
         </div>
     </div>
     <div class="form-group">
-        <label>Marca ID</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@ProductoDTO.MarcaId" />
-            <ValidationMessage For="@(() => ProductoDTO.MarcaId)" />
+        <label for="MarcaId">Marca</label>
+        <div class="d-flex">
+            <InputSelect class="form-control me-2" id="MarcaId" @bind-Value="ProductoDTO.MarcaId">
+                <option value="">Seleccione...</option>
+                @foreach (var marca in marcas)
+                {
+                    <option value="@marca.Id">@marca.Nombre</option>
+                }
+            </InputSelect>
+            <a href="/api/Marca/Crear" class="btn btn-outline-primary">+</a>
         </div>
     </div>
     <div class="form-group">
-        <label>Unidad ID</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@ProductoDTO.UnidadId" />
-            <ValidationMessage For="@(() => ProductoDTO.UnidadId)" />
+        <label for="UnidadId">Unidad</label>
+        <div class="d-flex">
+            <InputSelect class="form-control me-2" id="UnidadId" @bind-Value="ProductoDTO.UnidadId">
+                <option value="">Seleccione...</option>
+                @foreach (var unidad in unidades)
+                {
+                    <option value="@unidad.Id">@unidad.Nombre</option>
+                }
+            </InputSelect>
+            <a href="/api/Unidad/Crear" class="btn btn-outline-primary">+</a>
         </div>
     </div>
     <div class="form-group">
@@ -48,10 +60,16 @@
         </div>
     </div>
     <div class="form-group">
-        <label>Categoria ID</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@ProductoDTO.CategoriaId" />
-            <ValidationMessage For="@(() => ProductoDTO.CategoriaId)" />
+        <label for="CategoriaId">Categoria</label>
+        <div class="d-flex">
+            <InputSelect class="form-control me-2" id="CategoriaId" @bind-Value="ProductoDTO.CategoriaId">
+                <option value="">Seleccione...</option>
+                @foreach (var categoria in categorias)
+                {
+                    <option value="@categoria.Id">@categoria.Nombre</option>
+                }
+            </InputSelect>
+            <a href="/api/Categoria/Crear" class="btn btn-outline-primary">+</a>
         </div>
     </div>
 
@@ -73,7 +91,28 @@
 
 @code {
     private Producto ProductoDTO = new Producto();
+    private List<Marca> marcas = new List<Marca>();
+    private List<Unidad> unidades = new List<Unidad>();
+    private List<Categoria> categorias = new List<Categoria>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        var HttpRespuestaMarca = await http.Get<List<Marca>>("api/Marca");
+        if (!HttpRespuestaMarca.Error)
+        {
+            marcas = HttpRespuestaMarca.Respuesta;
+        }
+        var HttpRespuestaUnidad = await http.Get<List<Unidad>>("api/Unidad");
+        if (!HttpRespuestaUnidad.Error)
+        {
+            unidades = HttpRespuestaUnidad.Respuesta;
+        }
+        var HttpRespuestaCategoria = await http.Get<List<Categoria>>("api/Categoria");
+        if (!HttpRespuestaCategoria.Error)
+        {
+            categorias = HttpRespuestaCategoria.Respuesta;
+        }
+    }
     private async Task Grabar()
     {
         var HttpRespuesta = await http.Post<Producto, int>("api/Producto", ProductoDTO);
