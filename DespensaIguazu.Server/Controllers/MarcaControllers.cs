@@ -13,25 +13,25 @@ namespace DespensaIguazu.Server.Controllers
     [Route("api/Marca")]
     public class MarcaControllers : ControllerBase
     {
- 
+
         private readonly IMarcaRepositorio repositorio;
         private readonly IMapper mapper;
 
         public MarcaControllers(IMarcaRepositorio repositorio, IMapper mapper)
         {
- 
+
             this.repositorio = repositorio;
             this.mapper = mapper;
         }
 
         [HttpGet]//Select
-        public async Task<ActionResult<List<Marca>>> Get() 
+        public async Task<ActionResult<List<Marca>>> Get()
         {
             return await repositorio.Select();
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(CrearMarcaDTO entidadDTO)  
+        public async Task<ActionResult<int>> Post(CrearMarcaDTO entidadDTO)
         {
             try
             {
@@ -49,14 +49,14 @@ namespace DespensaIguazu.Server.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, [FromBody] Marca entidad)
         {
-            if (id != entidad.Id) 
+            if (id != entidad.Id)
             {
                 return BadRequest("No coinciden los IDs");
             }
 
             var ActualizarDatos = await repositorio.SelectById(id);
 
-            if (ActualizarDatos == null) 
+            if (ActualizarDatos == null)
             {
                 return BadRequest("No existe la marca buscada");
             }
@@ -76,16 +76,16 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id) 
+        public async Task<ActionResult> Delete(int id)
         {
             var Verif = await repositorio.Existe(id);
 
-            if (!Verif) 
+            if (!Verif)
             {
                 return BadRequest($"El id {id} no existe");
             }
 
-            if (await repositorio.Delete(id)) 
+            if (await repositorio.Delete(id))
             {
                 return Ok();
             }

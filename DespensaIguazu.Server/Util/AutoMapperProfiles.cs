@@ -11,7 +11,7 @@ namespace DespensaIguazu.Server.Util
             CreateMap<CrearCategoriaDTO, Categoria>();
             CreateMap<CrearMarcaDTO, Marca>();
             CreateMap<CrearUnidadDTO, Unidad>();
-            CreateMap<CrearProductoDTO, Producto>();
+            CreateMap<CrearProductoDTO, Producto>().ReverseMap();
             CreateMap<EditarPrecioDTO, Producto>();
         }
     }

@@ -2,20 +2,28 @@
 @inject IJSRuntime js
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<div class="container my-5 p-4 rounded"
+     style="background: linear-gradient(135deg, #6a0dad, #000000); box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
 
-<p role="status">Current count: @currentCount</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-white mb-0">Contador</h2>
+    </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <div class="p-4 rounded shadow" style="background-color: #1e1e2f; color: white;">
+        <p class="fs-4">Valor actual: <strong>@currentCount</strong></p>
+
+        <button class="btn btn-light btn-lg shadow" @onclick="IncrementCount">
+            Incrementar
+        </button>
+    </div>
+</div>
 
 @code {
     private int currentCount = 0;
 
-
     private async Task IncrementCount()
     {
-        var confirmado = await js.Confirmar($"¿Desea incrementar el contador?");
-
+        var confirmado = await js.Confirmar("¿Desea incrementar el contador?");
         if (confirmado)
         {
             currentCount++;
@@ -24,6 +32,5 @@
         {
             currentCount--;
         }
-
     }
 }

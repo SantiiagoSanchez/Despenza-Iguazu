@@ -10,15 +10,15 @@ namespace DespensaIguazu.Server.Controllers
 {
     [ApiController]
     [Route("api/Producto")]
-    public class ProductoControllers : ControllerBase
+    public class ProductoController : ControllerBase
     {
-        
+
         private readonly IProductoRepositorio repositorio;
         private readonly IMapper mapper;
 
-        public ProductoControllers(IProductoRepositorio repositorio, IMapper mapper)
+        public ProductoController(IProductoRepositorio repositorio, IMapper mapper)
         {
-            
+
             this.repositorio = repositorio;
             this.mapper = mapper;
         }
@@ -43,8 +43,7 @@ namespace DespensaIguazu.Server.Controllers
         {
             var producto = await repositorio.GetIncludeId(id);
             if (producto == null) return NotFound();
-            var dto = mapper.Map<Producto>(producto);
-            return Ok(dto);
+            return Ok(producto);
         }
 
         [HttpPost]//Add
@@ -53,7 +52,7 @@ namespace DespensaIguazu.Server.Controllers
             try
             {
                 Producto entidad = mapper.Map<Producto>(entidadDTO);
-                
+
                 return await repositorio.Insert(entidad);
             }
             catch (Exception e)
@@ -99,11 +98,11 @@ namespace DespensaIguazu.Server.Controllers
                 return BadRequest($"El id {id} no existe");
             }
 
-            if (await repositorio.Delete(id)) 
+            if (await repositorio.Delete(id))
             {
                 return Ok();
             }
-            else 
+            else
             {
                 return BadRequest();
             }

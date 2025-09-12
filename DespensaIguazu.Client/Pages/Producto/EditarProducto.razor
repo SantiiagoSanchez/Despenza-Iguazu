@@ -2,86 +2,101 @@
 @inject IHttpServicio http
 @inject NavigationManager navigationManager
 
+<div class="container my-5 p-4 rounded text-white"
+     style="background: linear-gradient(135deg, #6a0dad, #000000); box-shadow: 0 8px 20px rgba(0,0,0,0.2); max-width: 700px;">
 
-<EditForm Model="producto" OnValidSubmit="Grabar">
-    <DataAnnotationsValidator/>
-    <div class="form-group">
-        <label>Código</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@producto.Codigo" />
-            <ValidationMessage For="@(() => producto.Codigo)" />
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Editar Producto</h2>
     </div>
 
-    <div class="form-group">
-        <label>Nombre</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@producto.Nombre" />
-            <ValidationMessage For="@(() => producto.Nombre)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="MarcaId">Marca</label>
-        <InputSelect class="form-control" id="MarcaId" @bind-Value="producto.MarcaId">
-            <option value="">Seleccione...</option>
-            @foreach (var marca in marcas)
-            {
-                <option value="@marca.Id">@marca.Nombre</option>
-            }
-        </InputSelect>
-    </div>
-    <div class="form-group">
-        <label for="UnidadId">Unidades</label>
-        <InputSelect class="form-control" id="UnidadId" @bind-Value="producto.UnidadId">
-            <option value="">Seleccione...</option>
-            @foreach (var unidad in unidades)
-            {
-                <option value="@unidad.Id">@unidad.Nombre</option>
-            }
-        </InputSelect>
-    </div>
-    <div class="form-group">
-        <label>Precio</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@producto.Precio" />
-            <ValidationMessage For="@(() => producto.Precio)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Stock</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@producto.Stock" />
-            <ValidationMessage For="@(() => producto.Stock)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="CategoriaId">Categoria</label>
-        <InputSelect class="form-control" id="CategoriaId" @bind-Value="producto.CategoriaId">
-            <option value="">Seleccione...</option>
-            @foreach (var categoria in categorias)
-            {
-                <option value="@categoria.Id">@categoria.Nombre</option>
-            }
-        </InputSelect>
-    </div>
-    <br>
-    <button class="btn btn-success" type="submit">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-            <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-        </svg>
-        Aceptar
-    </button>
-    <button class="btn btn-danger" @onclick="Cancelar">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-        </svg>
-        Cancelar
-    </button>
+    <EditForm Model="producto" OnValidSubmit="Grabar">
+        <DataAnnotationsValidator />
 
-</EditForm>
+        <div class="mb-3">
+            <label class="form-label">Código</label>
+            <InputText class="form-control bg-dark text-white border-secondary" @bind-Value="@producto.Codigo" />
+            <ValidationMessage For="@(() => producto.Codigo)" class="text-danger" />
+        </div>
 
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <InputText class="form-control bg-dark text-white border-secondary" @bind-Value="@producto.Nombre" />
+            <ValidationMessage For="@(() => producto.Nombre)" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Marca</label>
+            <InputSelect class="form-select bg-dark text-white border-secondary" @bind-Value="producto.MarcaId">
+                <option value="">Seleccione...</option>
+                @foreach (var marca in marcas)
+                {
+                    <option value="@marca.Id">@marca.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Unidad</label>
+            <InputSelect class="form-select bg-dark text-white border-secondary" @bind-Value="producto.UnidadId">
+                <option value="">Seleccione...</option>
+                @foreach (var unidad in unidades)
+                {
+                    <option value="@unidad.Id">@unidad.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Precio</label>
+            <InputNumber class="form-control bg-dark text-white border-secondary" @bind-Value="@producto.Precio" />
+            <ValidationMessage For="@(() => producto.Precio)" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Stock</label>
+            <InputNumber class="form-control bg-dark text-white border-secondary" @bind-Value="@producto.Stock" />
+            <ValidationMessage For="@(() => producto.Stock)" class="text-danger" />
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Categoría</label>
+            <InputSelect class="form-select bg-dark text-white border-secondary" @bind-Value="producto.CategoriaId">
+                <option value="">Seleccione...</option>
+                @foreach (var categoria in categorias)
+                {
+                    <option value="@categoria.Id">@categoria.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-success" type="submit" title="Aceptar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                     class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75
+                             0 0 0-1.06 1.06L6.97 11.03a.75.75
+                             0 0 0 1.079-.02l3.992-4.99a.75.75
+                             0 0 0-1.071-1.05" />
+                </svg>
+            </button>
+
+            <button class="btn btn-danger" @onclick="Cancelar" title="Cancelar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                     class="bi bi-x-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="M4.646 4.646a.5.5 0 0 1
+                             .708 0L8 7.293l2.646-2.647a.5.5
+                             0 0 1 .708.708L8.707 8l2.647
+                             2.646a.5.5 0 0 1-.708.708L8
+                             8.707l-2.646 2.647a.5.5 0 0
+                             1-.708-.708L7.293 8 4.646
+                             5.354a.5.5 0 0 1 0-.708" />
+                </svg>
+            </button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
     [Parameter] public int ProductoID { get; set; }
@@ -89,7 +104,6 @@
     private List<Unidad> unidades = new List<Unidad>();
     private List<Categoria> categorias = new List<Categoria>();
     private Producto producto = new Producto();
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,27 +132,19 @@
     private async Task Mostrar()
     {
         var respuesta = await http.Get<Producto>($"api/Producto/{ProductoID}");
-
-
         if (!respuesta.Error)
         {
             producto = respuesta.Respuesta;
         }
     }
 
-
     private async Task Grabar()
     {
         var httpRespuesta = await http.Put<Producto>($"api/Producto/{ProductoID}", producto);
-
-        if (httpRespuesta.Error)
+        if (!httpRespuesta.Error)
         {
-            var body = httpRespuesta.HttpResponseMessage;
+            navigationManager.NavigateTo("/api/Producto");
         }
-
-        navigationManager.NavigateTo("/api/Producto");
-
-
     }
 
     private void Cancelar()

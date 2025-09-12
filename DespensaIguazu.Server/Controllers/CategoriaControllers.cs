@@ -28,7 +28,7 @@ namespace DespensaIguazu.Server.Controllers
 
         [HttpGet]//Select
         [OutputCache(Tags = [CacheKey])]
-        public async Task<ActionResult<List<Categoria>>> Get() 
+        public async Task<ActionResult<List<Categoria>>> Get()
         {
             return await repositorio.Select();
         }
@@ -53,16 +53,16 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPut("{id:int}")]//Update
-        public async Task<ActionResult> Put(int id, [FromBody] Categoria entidad) 
+        public async Task<ActionResult> Put(int id, [FromBody] Categoria entidad)
         {
-            if (id != entidad.Id) 
+            if (id != entidad.Id)
             {
                 return BadRequest("Los IDs no coinciden");
             }
 
             var ActualizaDato = await repositorio.SelectById(id);
 
-            if (ActualizaDato == null) 
+            if (ActualizaDato == null)
             {
                 return BadRequest("No existe la categoria buscada");
             }
@@ -86,23 +86,23 @@ namespace DespensaIguazu.Server.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var ExisteVerif = await repositorio.Existe(id);
-            if (!ExisteVerif) 
+            if (!ExisteVerif)
             {
                 return BadRequest($"El id {id} no existe");
             }
 
-            if (await repositorio.Delete(id)) 
+            if (await repositorio.Delete(id))
             {
                 await outputCacheStore.EvictByTagAsync(CacheKey, default);
 
                 return Ok();
             }
-            else 
+            else
             {
                 return BadRequest();
             }
 
-            
+
 
         }
     }

@@ -6,7 +6,7 @@ namespace DespensaIguazu.Server.Repositorio
 {
     public interface IProductoRepositorio : IRepositorio<Producto>
     {
-        Task<ActionResult<Producto>> GetIncludeId(int id);
+        Task<Producto?> GetIncludeId(int id);
         Task<List<Producto>> SelectAll();
         Task<bool> UpdateDTO(int id, EditarPrecioDTO entidad);
         Task<bool> UpdateEntidad(int id, Producto entidad);

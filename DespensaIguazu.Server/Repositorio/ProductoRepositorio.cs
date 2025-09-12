@@ -96,11 +96,13 @@ namespace DespensaIguazu.Server.Repositorio
 
         }
 
-        public async Task<ActionResult<Producto>> GetIncludeId(int id)
+        public async Task<Producto?> GetIncludeId(int id)
         {
-            Producto? prod = await context.Productos.Include(c => c.Marca).Include(a => a.Unidad).Include(t => t.Categoria).FirstOrDefaultAsync(x => x.Id == id);
-
-            return prod;
+            return await context.Productos
+                .Include(c => c.Marca)
+                .Include(a => a.Unidad)
+                .Include(t => t.Categoria)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

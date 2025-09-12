@@ -47,8 +47,25 @@ namespace DespensaIguazu.Server.Repositorio
 
         public async Task<E> SelectById(int id)
         {
-            E? pepe = await context.Set<E>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
-            return pepe;
+            try
+            {
+                if (!await Existe(id))
+                {
+                    Console.WriteLine($"El producto con id {id} No existe");
+                    return null;
+                }
+
+                return await context.Set<E>().FirstOrDefaultAsync(e => e.Id == id);
+
+
+            }
+            catch (Exception ex)
+            {
+                //ImprimirError(ex);
+                //Descomentar al Publicar el proyecto en IIS
+                //Logger.LogError(ex);
+                throw;
+            }
         }
 
         public async Task<bool> Update(int id, E entidad)

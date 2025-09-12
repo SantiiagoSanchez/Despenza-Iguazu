@@ -16,14 +16,14 @@ namespace DespensaIguazu.Server.Controllers
         private readonly IUnidadRepositorio repositorio;
         private readonly IMapper mapper;
 
-        public UnidadControllers(IUnidadRepositorio repositorio, IMapper mapper) 
+        public UnidadControllers(IUnidadRepositorio repositorio, IMapper mapper)
         {
             this.repositorio = repositorio;
             this.mapper = mapper;
         }
 
         [HttpGet]//Select
-        public async Task<ActionResult<List<Unidad>>> Get() 
+        public async Task<ActionResult<List<Unidad>>> Get()
         {
             return await repositorio.Select();
         }
@@ -45,16 +45,16 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPut("{id:int}")]//Editar
-        public async Task<ActionResult> Put(int id, [FromBody] Unidad entidad) 
+        public async Task<ActionResult> Put(int id, [FromBody] Unidad entidad)
         {
-            if (id != entidad.Id) 
+            if (id != entidad.Id)
             {
                 return BadRequest("Los IDs no coinciden");
             }
 
             var ActualizarDatos = await repositorio.SelectById(id);
 
-            if (ActualizarDatos == null) 
+            if (ActualizarDatos == null)
             {
                 return BadRequest("No existe la unidad buscada");
             }
@@ -74,24 +74,24 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]//Borrar
-        public async Task<ActionResult> Delete(int id) 
+        public async Task<ActionResult> Delete(int id)
         {
             var Verificacion = await repositorio.Existe(id);
 
-            if (!Verificacion) 
+            if (!Verificacion)
             {
                 return BadRequest($"El id {id} no existe");
             }
 
-            if (await repositorio.Delete(id)) 
+            if (await repositorio.Delete(id))
             {
                 return Ok();
             }
-            else 
+            else
             {
                 return BadRequest();
             }
-          
+
 
         }
     }

@@ -2,54 +2,101 @@
 @inject IHttpServicio http
 @using Microsoft.AspNetCore.Authorization
 
-<h2 style="text-align:center">Lista de productos</h2>
-<br>
-<a class="btn btn-success" href="/api/Producto/Crear">Nuevo producto</a>
+<div class="container my-5 p-4 rounded"
+     style="background: linear-gradient(135deg, #6a0dad, #000000); box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-white mb-0">Lista de Productos</h2>
+        <a class="btn btn-light btn-lg rounded-circle d-flex justify-content-center align-items-center shadow"
+           href="/api/Producto/Crear" style="width: 48px; height: 48px;" title="Nuevo producto">
+            <span class="fs-3" style="line-height: 1;">+</span>
+        </a>
+    </div>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>Marca</th>
-            <th>Unidad</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Categoria</th>
+    <div class="table-responsive shadow rounded" style="background-color: #1e1e2f;">
+        <table class="table table-hover table-dark align-middle mb-0">
+            <thead style="background-color: #7d2ae8;">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Unidad</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col" class="text-center" style="width: 120px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (listaProducto == null)
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-3 text-white">Buscando productos ...</td>
+                    </tr>
+                }
+                else if (!listaProducto.Any())
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-3 text-white">No hay productos disponibles.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in listaProducto)
+                    {
+                        <tr>
+                            <td>@item.Codigo</td>
+                            <td>@item.Nombre</td>
+                            <td>@item.Marca?.Nombre</td>
+                            <td>@item.Unidad?.Nombre</td>
+                            <td>@item.Precio$</td>
+                            <td>@item.Stock</td>
+                            <td>@item.Categoria?.Nombre</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-sm me-2" href="api/Producto/Editar/@item.Id" title="Editar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1
+                                                         .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805
+                                                         2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0
+                                                         .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0
+                                                         1.5-1.5v-6a.5.5 0 0 0-1
+                                                         0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0
+                                                         1-.5-.5v-11a.5.5 0 0 1
+                                                         .5-.5H9a.5.5 0 0 0
+                                                         0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm" @onclick="() => EliminarTipoGasto(item.Id)" title="Eliminar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6
+                                                         6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1
+                                                         .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5
+                                                         0 0 1-1 0V6a.5.5 0 0 1
+                                                         .5-.5m3 .5a.5.5 0 0 0-1
+                                                         0v6a.5.5 0 0 0 1 0z" />
+                                        <path d="M14.5 3a1 1 0 0 1-1
+                                                         1H13v9a2 2 0 0 1-2
+                                                         2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0
+                                                         1-1-1V2a1 1 0 0 1
+                                                         1-1H6a1 1 0 0 1
+                                                         1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0
+                                                         1 1 1zM4.118 4 4 4.059V13a1 1 0 0
+                                                         0 1 1h6a1 1 0 0 0
+                                                         1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        </tr>
-    </thead>
-    <tbody>
-
-        @if (listaProducto == null)
-        {
-           <p>Buscando productos ...</p>
-        }
-        @foreach (var item in listaProducto)
-        {
-            <tr>
-                <td>@item.Codigo</td>
-                <td>@item.Nombre</td>
-                <td>@item.Marca?.Nombre</td>
-                <td>@item.Unidad?.Nombre</td>
-                <td>@item.Precio</td>
-                <td>@item.Stock</td>
-                <td>@item.Categoria?.Nombre</td>
-                <td>
-                    <a class="btn btn-warning" href="api/Producto/Editar/@item.Id">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                        </svg>
-
-                    </a>
-                </td>
-
-            </tr>
-        }
-    </tbody>
-
-</table>
 @code {
     List<Producto> listaProducto = new List<Producto>();
     string Mensaje = "";
@@ -64,7 +111,7 @@
     {
         var resp = await http.Get<List<Producto>>("api/Producto");
 
-        if(!resp.Error)
+        if (!resp.Error)
         {
             listaProducto = resp.Respuesta;
         }
@@ -72,5 +119,11 @@
         {
             Mensaje = "Error";
         }
+    }
+
+    private async Task EliminarTipoGasto(int id)
+    {
+        await http.Delete($"api/Producto/{id}");
+        await Leer();
     }
 }
