@@ -4,6 +4,7 @@ using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Server.Repositorio;
 using DespensaIguazu.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 
 namespace DespensaIguazu.Server.Controllers
@@ -15,15 +16,20 @@ namespace DespensaIguazu.Server.Controllers
 
         private readonly IProductoRepositorio repositorio;
         private readonly IMapper mapper;
+        private readonly IOutputCacheStore outputCacheStore;
+        private const string CacheKey = "ProductosCache";
 
-        public ProductoController(IProductoRepositorio repositorio, IMapper mapper)
+        public ProductoController(IProductoRepositorio repositorio, IMapper mapper, IOutputCacheStore outputCacheStore)
         {
 
             this.repositorio = repositorio;
             this.mapper = mapper;
+            this.outputCacheStore = outputCacheStore;
         }
 
         [HttpGet] // Select
+        [OutputCache(Tags = [CacheKey])]
+
         public async Task<ActionResult<List<Producto>>> Get()
         {
             try
@@ -52,7 +58,7 @@ namespace DespensaIguazu.Server.Controllers
             try
             {
                 Producto entidad = mapper.Map<Producto>(entidadDTO);
-
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return await repositorio.Insert(entidad);
             }
             catch (Exception e)
@@ -78,6 +84,7 @@ namespace DespensaIguazu.Server.Controllers
                 {
                     return BadRequest("No se pudo actualizar el producto");
                 }
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return Ok();
 
             }
@@ -100,6 +107,7 @@ namespace DespensaIguazu.Server.Controllers
 
             if (await repositorio.Delete(id))
             {
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return Ok();
             }
             else

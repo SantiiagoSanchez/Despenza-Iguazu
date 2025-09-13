@@ -4,6 +4,7 @@ using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Server.Repositorio;
 using DespensaIguazu.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -16,15 +17,21 @@ namespace DespensaIguazu.Server.Controllers
 
         private readonly IMarcaRepositorio repositorio;
         private readonly IMapper mapper;
+        private readonly IOutputCacheStore outputCacheStore;
+        private const string CacheKey = "MarcasCache";
 
-        public MarcaControllers(IMarcaRepositorio repositorio, IMapper mapper)
+
+        public MarcaControllers(IMarcaRepositorio repositorio, IMapper mapper, IOutputCacheStore outputCacheStore)
         {
 
             this.repositorio = repositorio;
             this.mapper = mapper;
+            this.outputCacheStore = outputCacheStore;
         }
 
         [HttpGet]//Select
+        [OutputCache(Tags = [CacheKey])]
+
         public async Task<ActionResult<List<Marca>>> Get()
         {
             return await repositorio.Select();
@@ -36,7 +43,7 @@ namespace DespensaIguazu.Server.Controllers
             try
             {
                 Marca entidad = mapper.Map<Marca>(entidadDTO);
-
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return await repositorio.Insert(entidad);
             }
             catch (Exception e)
@@ -66,6 +73,7 @@ namespace DespensaIguazu.Server.Controllers
             try
             {
                 await repositorio.Update(id, ActualizarDatos);
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return Ok();
             }
             catch (Exception e)
@@ -87,6 +95,7 @@ namespace DespensaIguazu.Server.Controllers
 
             if (await repositorio.Delete(id))
             {
+                await outputCacheStore.EvictByTagAsync(CacheKey, default);
                 return Ok();
             }
             else
