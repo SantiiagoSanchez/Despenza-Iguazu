@@ -1,7 +1,49 @@
 ﻿@page "/login"
-
+@using DespensaIguazu.Client.Autorizacion
+@inject IHttpServicio http
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+@inject ILoginService loginService
 <h3>Login</h3>
 
-@code {
+<EditForm Model="@userInfo" OnValidSubmit="Loguear">
+    <DataAnnotationsValidator /> <!--Validaciones en clases o tablas-->
+    <div class="mb-3">
+        <label for="email" class="form-label>">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="userInfo.Email" />
+        <ValidationMessage For="@(() => userInfo.Email)" />
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label>">Password</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="userInfo.Password" />
+        <ValidationMessage For="@(() => userInfo.Password)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Loguear</button>
+</EditForm>
 
+@code {
+    private UserInfoDTO userInfo = new UserInfoDTO();
+
+    private async Task Loguear()
+    {
+        var resultado = await http.Post<UserInfoDTO, UserTokenDTO>("api/Usuario/login", userInfo);
+        if (resultado.Error)
+        {
+            var msg = await resultado.ObtenerError();
+            await js.Confirmar(msg);
+        }
+        else
+        {
+            var UserToken = resultado.Respuesta as UserTokenDTO;
+            if (UserToken != null)
+            {
+                await loginService.Login(UserToken);
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                await js.Confirmar("No se pudo obtener el token");
+            }
+        }
+    }
 }

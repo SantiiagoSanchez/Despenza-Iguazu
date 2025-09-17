@@ -1,7 +1,15 @@
 ﻿@page "/logout"
-
+@using DespensaIguazu.Client.Autorizacion
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
 <h3>LogOut</h3>
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loginService.Logout();
+        navigationManager.NavigateTo("/");
+    }
 
 }
