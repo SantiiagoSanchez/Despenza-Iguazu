@@ -1,0 +1,27 @@
+﻿body {
+}
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+
+.authorized-title {
+    color: green;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.not-authorized-title {
+    color: red;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.subtext {
+    font-size: 1.2rem;
+}

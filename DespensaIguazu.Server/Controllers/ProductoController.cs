@@ -3,6 +3,8 @@ using DespensaIguazu.BD.Data;
 using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Server.Repositorio;
 using DespensaIguazu.Shared.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,8 @@ namespace DespensaIguazu.Server.Controllers
 {
     [ApiController]
     [Route("api/Producto")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class ProductoController : ControllerBase
     {
 

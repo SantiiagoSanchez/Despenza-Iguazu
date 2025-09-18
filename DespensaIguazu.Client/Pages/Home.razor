@@ -1,21 +1,22 @@
 ﻿@page "/"  
 
+
+<link href="~/css/paginaHome.css" rel="stylesheet" />
 <PageTitle>Home</PageTitle>  
 
-<AuthorizeView>  
-    <Authorized>  
-        <p>Usuario autorizado</p><br />  
-        <p>Bienvenido @context.User.Identity?.Name</p>
-        @foreach (var item in context.User.Claims)
-        {
-            <td>@item.Value</td>
-        }
-    </Authorized>  
-    <NotAuthorized>  
-        <p>Usuario no autorizado</p>  
-    </NotAuthorized>  
-</AuthorizeView>  
 
-<h1>Hello, world!</h1>  
+<AuthorizeView>
+    <Authorized>
+        <div class="centered-container">
+            <p class="authorized-title">Usuario autorizado</p>
+            <p class="subtext">Bienvenido @context.User.Identity?.Name</p>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="centered-container">
+            <p class="not-authorized-title">Usuario no autorizado</p>
+            <p class="subtext">Por favor, loguearse para utilizar las funciones</p>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
-Welcome to your new app.
