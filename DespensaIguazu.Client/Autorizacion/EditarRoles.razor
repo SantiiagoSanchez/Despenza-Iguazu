@@ -1,0 +1,92 @@
+﻿@page "/usuarios/editar/{UsuarioID}"
+@inject IHttpServicio http
+<h3>EditarRoles</h3>
+
+@if(roles == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if(roles.Count == 0)
+{
+    <div class="alert alert-warning" role="alert">
+        No hay roles disponibles.
+    </div>
+}
+else
+{
+    <p style="font-size: large">@Mensaje</p>
+
+    <div class="mb-3">
+        <label for="rolSelect" class="form-label">Seleccione un rol:</label>
+        <select id="rolSelect" class="form-select" @bind="rolSeleccionado">
+            <option value="0">-- Seleccione un rol --</option>
+            @foreach (var rol in roles)
+            {
+                <option value="@rol.Nombre">@rol.Nombre</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-primary" @onclick="AsignarRol">Asignar Rol</button>
+    <button class="btn btn-primary" @onclick="RemoverRol">Remover Rol</button>
+
+}
+)
+
+@code {
+    [Parameter]
+    public string UsuarioID { get; set; } = null!;
+
+    private List<RolDTO>? roles;
+
+    private string rolSeleccionado = "0";
+    public string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var rolesHttp = await http.Get<List<RolDTO>>("usuarios/Admin/roles");
+        if (!rolesHttp.Error){
+            roles = rolesHttp.Respuesta;
+        }
+        else
+        {
+            Mensaje = await rolesHttp.ObtenerError();
+        }
+    }
+
+    private async Task AsignarRol()
+    {
+
+        await EditarRol("usuarios/Admin/asignar-rol");
+    }
+
+    private async Task RemoverRol()
+    {
+
+        await EditarRol("usuarios/Admin/remover-rol");
+    }
+
+    private async Task EditarRol(string Url)
+    {
+        if (rolSeleccionado == "0")
+        {
+            Mensaje = "Selecciona un rol para asignar.";
+            return;
+        }
+        var rolDTO = new RolEditarDTO() {
+            Rol = rolSeleccionado,
+            UsuarioId = UsuarioID
+        };
+
+        var response = await http.Post<RolEditarDTO, object>(Url, rolDTO);
+
+        if (response.Error)
+        {
+            Mensaje = await response.ObtenerError();
+        }
+        else
+        {
+            Mensaje = $"Operación realizada con éxito. Se asigno/removio el rol {rolDTO.Rol} a el usuario con id {rolDTO.UsuarioId}";
+        }
+    }
+
+}

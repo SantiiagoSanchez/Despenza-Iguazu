@@ -28,7 +28,7 @@ namespace DespensaIguazu.Client.Servicios
             }
         }
 
-        public async Task<HttpRespuesta<TResp>> Post<T, TResp>(string url, T entidad) 
+        public async Task<HttpRespuesta<TResp?>> Post<T, TResp>(string url, T entidad) 
         {
             var EnviarJSON = JsonSerializer.Serialize(entidad);
             var EnviarCONTENIDO = new StringContent(EnviarJSON, Encoding.UTF8, "application/json");
@@ -36,11 +36,11 @@ namespace DespensaIguazu.Client.Servicios
             if (Response.IsSuccessStatusCode)
             {
                 var Respuesta = await DesSerializar<TResp>(Response);
-                return new HttpRespuesta<TResp>(Respuesta, false, Response);
+                return new HttpRespuesta<TResp?>(Respuesta, false, Response);
             }
             else 
             {
-                return new HttpRespuesta<TResp>(default, true, Response);
+                return new HttpRespuesta<TResp?>(default, true, Response);
             }
         }
 
@@ -74,6 +74,10 @@ namespace DespensaIguazu.Client.Servicios
         private async Task<T?> DesSerializar<T>(HttpResponseMessage response)
         {
             var RespuestaSTR = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(RespuestaSTR))
+            {
+                return default;
+            }
             return JsonSerializer.Deserialize<T>(RespuestaSTR, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
     }

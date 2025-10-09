@@ -67,6 +67,15 @@ namespace DespensaIguazu.Server.Controllers
                 new Claim(ClaimTypes.Name, userInfo.Email)
 
             };
+
+            var usuario = await userManager.FindByEmailAsync(userInfo.Email);
+
+            var roles = await userManager.GetRolesAsync(usuario!);
+            foreach (var rol in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, rol));
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]!));
 
             var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

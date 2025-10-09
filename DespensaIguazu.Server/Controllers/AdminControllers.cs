@@ -30,5 +30,34 @@ namespace DespensaIguazu.Server.Controllers
 
             return userDTO;
         }
+
+        [HttpGet("roles")]
+        public async Task<ActionResult<List<RolDTO>>> GetRoles()
+        {
+            var roles = context.Roles.AsQueryable();
+            var rolesDTO = roles.Select(x => new RolDTO
+            {
+                Nombre = x.Name!
+            }).ToList();
+            return rolesDTO;
+        }
+
+        [HttpPost("asignar-rol")]
+        public async Task<ActionResult> AsignarRol(RolEditarDTO dto)
+        {
+            var usuario = await userManager.UserManager.FindByIdAsync(dto.UsuarioId);
+            if (usuario == null) { return NotFound("Usuario no encontrado"); }
+            await userManager.UserManager.AddToRoleAsync(usuario, dto.Rol);
+            return NoContent();
+        }
+
+        [HttpPost("remover-rol")]
+        public async Task<ActionResult> RemoverRol(RolEditarDTO dto)
+        {
+            var usuario = await userManager.UserManager.FindByIdAsync(dto.UsuarioId);
+            if (usuario == null) { return NotFound("Usuario no encontrado"); }
+            await userManager.UserManager.RemoveFromRoleAsync(usuario, dto.Rol);
+            return NoContent();
+        }
     }
 }
