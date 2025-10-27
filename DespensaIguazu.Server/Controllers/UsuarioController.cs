@@ -15,12 +15,12 @@ namespace DespensaIguazu.Server.Controllers
     [Route("api/Usuario")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<MiUsuario> userManager;
+        private readonly SignInManager<MiUsuario> signInManager;
         private readonly IConfiguration configuration;
 
-        public UsuarioController(UserManager<IdentityUser> userManager,
-                                 SignInManager<IdentityUser> signInManager,
+        public UsuarioController(UserManager<MiUsuario> userManager,
+                                 SignInManager<MiUsuario> signInManager,
                                  IConfiguration configuration)
         {
             this.userManager = userManager;
@@ -31,13 +31,13 @@ namespace DespensaIguazu.Server.Controllers
         [HttpPost("registrar")]
         public async Task<ActionResult<UserTokenDTO>> CreateUser([FromBody] UserInfoDTO dto)
         {
-            var usuario = new IdentityUser { UserName = dto.Email, Email = dto.Email };
+            var usuario = new MiUsuario { UserName = dto.Email, Email = dto.Email, Nombre = dto.Nombre, Direccion = dto.Direccion, Telefono = dto.Telefono };
 
             var resultado = await userManager.CreateAsync(usuario, dto.Password);
 
             if (resultado.Succeeded)
             {
-                return await ConstruirToken(dto);
+                return await ConstruirToken(usuario);
             }
             else
             {
@@ -46,25 +46,31 @@ namespace DespensaIguazu.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserInfoDTO dto)
+        public async Task<ActionResult<UserTokenDTO>> Login([FromBody] LoginDTO dto)
         {
             var resultado = await signInManager.PasswordSignInAsync(dto.Email, dto.Password, isPersistent: false, lockoutOnFailure: false);
-            if (resultado.Succeeded)
-            {
-                return await ConstruirToken(dto);
-            }
-            else
+            if (!resultado.Succeeded)
             {
                 return BadRequest("Login incorrecto");
+                
             }
+
+            var usuario = await userManager.FindByEmailAsync(dto.Email);
+            if (usuario == null)
+            {
+                return BadRequest("Usuario no encontrado");
+            }
+
+            return await ConstruirToken(usuario);
         }
 
-        public async Task<ActionResult<UserTokenDTO>> ConstruirToken(UserInfoDTO userInfo)
+        public async Task<ActionResult<UserTokenDTO>> ConstruirToken(MiUsuario userInfo)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, userInfo.Email),
-                new Claim(ClaimTypes.Name, userInfo.Email)
+                new Claim(ClaimTypes.Name, userInfo.Nombre),
+                new Claim(ClaimTypes.StreetAddress, userInfo.Direccion)
 
             };
 

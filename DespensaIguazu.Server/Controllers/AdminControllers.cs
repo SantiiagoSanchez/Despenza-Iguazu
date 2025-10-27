@@ -1,4 +1,5 @@
 ﻿using DespensaIguazu.BD.Data;
+using DespensaIguazu.BD.Data.Entity;
 using DespensaIguazu.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace DespensaIguazu.Server.Controllers
     public class AdminControllers : ControllerBase
     {
         private readonly Context context;
-        private readonly SignInManager<IdentityUser> userManager;
+        private readonly SignInManager<MiUsuario> userManager;
 
-        public AdminControllers(Context context, SignInManager<IdentityUser> userManager)
+        public AdminControllers(Context context, SignInManager<MiUsuario> userManager)
         {
             this.context = context;
             this.userManager = userManager;
@@ -25,7 +26,9 @@ namespace DespensaIguazu.Server.Controllers
             var userDTO = user.Select(x => new UserListadoDTO
             { 
                 Id = x.Id,
-                Email = x.Email!
+                Email = x.Email!,
+                Nombre = x.Nombre!,
+                Telefono = x.Telefono
             }).ToList();
 
             return userDTO;

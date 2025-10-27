@@ -22,11 +22,11 @@
 </EditForm>
 
 @code {
-    private UserInfoDTO userInfo = new UserInfoDTO();
+    private LoginDTO userInfo = new LoginDTO();
 
     private async Task Loguear()
     {
-        var resultado = await http.Post<UserInfoDTO, UserTokenDTO>("api/Usuario/login", userInfo);
+        var resultado = await http.Post<LoginDTO, UserTokenDTO>("api/Usuario/login", userInfo);
         if (resultado.Error)
         {
             var msg = await resultado.ObtenerError();

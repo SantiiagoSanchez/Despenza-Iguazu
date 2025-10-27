@@ -4,29 +4,53 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime js
 @inject ILoginService loginService
-<h3>Registrar</h3>
+
+<h3>Registrar nuevo usuario</h3>
 
 <EditForm Model="@userInfo" OnValidSubmit="CrearUsuario">
-    <DataAnnotationsValidator /> <!--Validaciones en clases o tablas-->
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
     <div class="mb-3">
-        <label for="email" class="form-label>">Email</label>
+        <label for="nombre" class="form-label">Nombre</label>
+        <InputText id="nombre" class="form-control" @bind-Value="userInfo.Nombre" />
+        <ValidationMessage For="@(() => userInfo.Nombre)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <InputNumber id="telefono" class="form-control" @bind-Value="userInfo.Telefono" />
+        <ValidationMessage For="@(() => userInfo.Telefono)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="direccion" class="form-label">Dirección</label>
+        <InputText id="direccion" class="form-control" @bind-Value="userInfo.Direccion" />
+        <ValidationMessage For="@(() => userInfo.Direccion)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
         <InputText id="email" class="form-control" @bind-Value="userInfo.Email" />
         <ValidationMessage For="@(() => userInfo.Email)" />
     </div>
+
     <div class="mb-3">
-        <label for="password" class="form-label>">Password</label>
+        <label for="password" class="form-label">Password</label>
         <InputText id="password" type="password" class="form-control" @bind-Value="userInfo.Password" />
         <ValidationMessage For="@(() => userInfo.Password)" />
     </div>
+
     <button type="submit" class="btn btn-primary">Registrar</button>
 </EditForm>
 
 @code {
-    private UserInfoDTO userInfo = new UserInfoDTO();
+    private UserInfoDTO userInfo = new();
 
     private async Task CrearUsuario()
     {
         var resultado = await http.Post<UserInfoDTO, UserTokenDTO>("api/Usuario/registrar", userInfo);
+
         if (resultado.Error)
         {
             var msg = await resultado.ObtenerError();
@@ -34,10 +58,10 @@
         }
         else
         {
-            var UserToken = resultado.Respuesta as UserTokenDTO;
-            if (UserToken!= null)
+            var token = resultado.Respuesta;
+            if (token != null)
             {
-                await loginService.Login(UserToken);
+                await loginService.Login(token);
                 navigationManager.NavigateTo("/");
             }
             else

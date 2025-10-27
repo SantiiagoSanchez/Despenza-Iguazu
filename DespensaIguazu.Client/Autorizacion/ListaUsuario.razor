@@ -19,6 +19,8 @@
             <thead style="background-color: #7d2ae8;">
                 <tr>
                     <th scope="col">Email</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Teléfono</th>
                     <th scope="col" class="text-center" style="width: 120px;">Acciones</th>
                 </tr>
             </thead>
@@ -26,7 +28,7 @@
                 @if (listaUsuarios == null)
                 {
                     <tr>
-                        <td colspan="2" class="text-center py-3 text-white">Buscando usuarios...</td>
+                        <td colspan="4" class="text-center py-3 text-white">Buscando usuarios...</td>
                     </tr>
                 }
                 else if (!listaUsuarios.Any())
@@ -41,6 +43,8 @@
                     {
                         <tr>
                             <td>@item.Email</td>
+                            <td>@item.Nombre</td>
+                            <td>@item.Telefono</td>
                             <a class="btn btn-outline-light" href="/usuarios/editar/@item.Id" style="font-size: small">Asignar Rol</a>
                         </tr>
                     }

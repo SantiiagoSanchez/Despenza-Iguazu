@@ -14,6 +14,10 @@ namespace DespensaIguazu.Shared.DTO
 
         public string Password { get; set; } = null!;
 
+        public string Nombre { get; set; } = null!;
 
+        public int Telefono { get; set; }
+
+        public string Direccion { get; set; } = null!;
     }
 }

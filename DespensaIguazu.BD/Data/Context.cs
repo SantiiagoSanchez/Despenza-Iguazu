@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DespensaIguazu.BD.Data
 {
-    public class Context : IdentityDbContext
+    public class Context : IdentityDbContext<MiUsuario>
 
     {
         public DbSet<Unidad> Unidades { get; set; }
