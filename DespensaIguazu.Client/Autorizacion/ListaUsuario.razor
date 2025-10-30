@@ -21,6 +21,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Teléfono</th>
+                    <th scope="col">Rol</th>
                     <th scope="col" class="text-center" style="width: 120px;">Acciones</th>
                 </tr>
             </thead>
@@ -45,6 +46,7 @@
                             <td>@item.Email</td>
                             <td>@item.Nombre</td>
                             <td>@item.Telefono</td>
+                            <td>@item.Rol</td>
                             <a class="btn btn-outline-light" href="/usuarios/editar/@item.Id" style="font-size: small">Asignar Rol</a>
                         </tr>
                     }

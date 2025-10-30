@@ -11,27 +11,36 @@ namespace DespensaIguazu.Server.Controllers
     public class AdminControllers : ControllerBase
     {
         private readonly Context context;
-        private readonly SignInManager<MiUsuario> userManager;
+        private readonly SignInManager<MiUsuario> signInManager;
+        private readonly UserManager<MiUsuario> userManager;
 
-        public AdminControllers(Context context, SignInManager<MiUsuario> userManager)
+        public AdminControllers(Context context, SignInManager<MiUsuario> signInManager, UserManager<MiUsuario> userManager)
         {
             this.context = context;
+            this.signInManager = signInManager;
             this.userManager = userManager;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<UserListadoDTO>>> Get()
         {
-            var user = context.Users.AsQueryable();
-            var userDTO = user.Select(x => new UserListadoDTO
-            { 
-                Id = x.Id,
-                Email = x.Email!,
-                Nombre = x.Nombre!,
-                Telefono = x.Telefono
-            }).ToList();
+            var usuarios = userManager.Users.ToList();
+            var lista = new List<UserListadoDTO>();
 
-            return userDTO;
+            foreach (var usuario in usuarios)
+            {
+                var roles = await userManager.GetRolesAsync(usuario); // trae la lista de roles
+                lista.Add(new UserListadoDTO
+                {
+                    Id = usuario.Id,
+                    Email = usuario.Email!,
+                    Nombre = usuario.Nombre,
+                    Telefono = usuario.Telefono,
+                    Rol = roles.FirstOrDefault() ?? "Sin rol" // tomamos el primer rol
+                });
+            }
+
+            return lista;
         }
 
         [HttpGet("roles")]
@@ -48,18 +57,18 @@ namespace DespensaIguazu.Server.Controllers
         [HttpPost("asignar-rol")]
         public async Task<ActionResult> AsignarRol(RolEditarDTO dto)
         {
-            var usuario = await userManager.UserManager.FindByIdAsync(dto.UsuarioId);
+            var usuario = await signInManager.UserManager.FindByIdAsync(dto.UsuarioId);
             if (usuario == null) { return NotFound("Usuario no encontrado"); }
-            await userManager.UserManager.AddToRoleAsync(usuario, dto.Rol);
+            await signInManager.UserManager.AddToRoleAsync(usuario, dto.Rol);
             return NoContent();
         }
 
         [HttpPost("remover-rol")]
         public async Task<ActionResult> RemoverRol(RolEditarDTO dto)
         {
-            var usuario = await userManager.UserManager.FindByIdAsync(dto.UsuarioId);
+            var usuario = await signInManager.UserManager.FindByIdAsync(dto.UsuarioId);
             if (usuario == null) { return NotFound("Usuario no encontrado"); }
-            await userManager.UserManager.RemoveFromRoleAsync(usuario, dto.Rol);
+            await signInManager.UserManager.RemoveFromRoleAsync(usuario, dto.Rol);
             return NoContent();
         }
     }
